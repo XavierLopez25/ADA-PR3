@@ -10,8 +10,7 @@ fn ejercicio1() {
         0,1,2,3,4,
     ];
     let mut total_cost = 0;
-    println!("=========================\n");
-    println!("Ejercicio 1: Move-To-Front costos para secuencia fija\n");
+    println!("\n=== Ejercicio 1: MTF sobre [0,1,2,3,4] y 20 solicitudes ===");
     for req in requests {
         println!("Lista antes:    {:?}", list);
         let cost = access_cost(&mut list, req);
@@ -24,8 +23,34 @@ fn ejercicio1() {
 }
 
 fn ejercicio2() {
-    println!("Ejercicio 2 aún no implementado.\n");
+    println!("\n=== Ejercicio 2: MTF sobre [0,1,2,3,4] y secuencia dada ===");
+    // Configuración inicial
+    let mut list = vec![0, 1, 2, 3, 4];
+    // Secuencia de 17 solicitudes según el enunciado
+    let requests = vec![
+        4, 3, 2, 1, 0,
+        1, 2, 3, 4,
+        3, 2, 1, 0,
+        1, 2, 3, 4,
+    ];
+
+    let mut total_cost = 0;
+    for req in requests {
+        // Estado antes del acceso
+        println!("Lista antes:    {:?}", list);
+        // Calcula costo y aplica MTF
+        let cost = access_cost(&mut list, req);
+        // Estado después
+        println!(
+            "Solicitud: {:>2} | Costo: {:>2} | Lista después: {:?}\n",
+            req, cost, list
+        );
+        total_cost += cost;
+    }
+
+    println!("Costo total de las accesos: {}\n", total_cost);
 }
+
 fn ejercicio3() {
     println!("Ejercicio 3 aún no implementado.\n");
 }
