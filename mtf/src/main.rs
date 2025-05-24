@@ -52,8 +52,25 @@ fn ejercicio2() {
 }
 
 fn ejercicio3() {
-    println!("Ejercicio 3 aún no implementado.\n");
+    println!("\n=== Ejercicio 3: secuencia de 20 solicitudes de costo mínimo ===");
+
+    // Configuración inicial
+    let mut list = vec![0, 1, 2, 3, 4];
+
+    // La secuencia que minimiza el costo es siempre pedir el elemento al frente (inicialmente 0)
+    let requests = vec![0; 20];
+
+    // Calculamos el costo total (y aplicamos MTF para verificar)
+    let mut total_cost = 0;
+    for &req in &requests {
+        total_cost += access_cost(&mut list, req);
+    }
+
+    // Mostramos resultados
+    println!("Secuencia elegida (20 veces el mismo elemento al frente): {:?}", requests);
+    println!("Costo total mínimo de acceso: {}\n", total_cost);
 }
+
 fn ejercicio4() {
     println!("Ejercicio 4 aún no implementado.\n");
 }
