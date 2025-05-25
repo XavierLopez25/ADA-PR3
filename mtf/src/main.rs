@@ -72,8 +72,28 @@ fn ejercicio3() {
 }
 
 fn ejercicio4() {
-    println!("Ejercicio 4 aún no implementado.\n");
+    println!("\n=== Ejercicio 4: secuencia de peor caso de 20 solicitudes ===");
+    // Configuración inicial
+    let mut list = vec![0, 1, 2, 3, 4];
+    // La peor secuencia pide siempre el elemento en la última posición:
+    // 4,3,2,1,0 repetido 4 veces → cada acceso cuesta 5 → total = 20*5 = 100
+    let base_seq = vec![4, 3, 2, 1, 0];
+    let mut requests = Vec::with_capacity(20);
+    for _ in 0..4 {
+        requests.extend(&base_seq);
+    }
+
+    // Calculamos el costo total
+    let mut total_cost = 0;
+    for &req in &requests {
+        total_cost += access_cost(&mut list, req);
+    }
+
+    // Mostramos la secuencia y el costo máximo
+    println!("Secuencia elegida (peor caso): {:?}", requests);
+    println!("Costo total de acceso (peor caso): {}", total_cost);
 }
+
 fn ejercicio5() {
     println!("Ejercicio 5 aún no implementado.\n");
 }
