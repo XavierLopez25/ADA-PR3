@@ -95,8 +95,46 @@ fn ejercicio4() {
 }
 
 fn ejercicio5() {
-    println!("Ejercicio 5 aún no implementado.\n");
+    println!("\n=== Ejercicio 5: repetición de un mismo elemento 20 veces ===");
+
+    // Parte a) 20 solicitudes de '2'
+    println!("\n-- Secuencia: veinte veces el elemento 2 --");
+    let mut list = vec![0, 1, 2, 3, 4];
+    let requests2 = vec![2; 20];
+    let mut total2 = 0;
+
+    for &req in &requests2 {
+        println!("Lista antes:    {:?}", list);
+        let cost = access_cost(&mut list, req);
+        println!(
+            "Solicitud: {:>2} | Costo: {:>2} | Lista después: {:?}\n",
+            req, cost, list
+        );
+        total2 += cost;
+    }
+    println!("Costo total con 20 repeticiones de 2: {}\n", total2);
+
+    // Parte b) ¿y si fueran veinte '3'?
+    let mut list = vec![0, 1, 2, 3, 4];
+    let requests3 = vec![3; 20];
+    let mut total3 = 0;
+    for &req in &requests3 {
+        total3 += access_cost(&mut list, req);
+    }
+    println!("Costo total con 20 repeticiones de 3: {}\n", total3);
+
+    // Observación del patrón
+    println!("Observación:");
+    println!(
+        "  Cuando repites 20 veces el mismo elemento x, el primer acceso cuesta \
+         su posición inicial (p) y los 19 restantes cuestan 1 (por estar ya en front).\n\
+         Así, C_total = p + 19·1. Por ejemplo:\n\
+         - Para x=2, p=3 ⇒ C=3+19=22\n\
+         - Para x=3, p=4 ⇒ C=4+19=23\n"
+    );
 }
+
+
 fn ejercicio6() {
     println!("Ejercicio 6 aún no implementado.\n");
 }
