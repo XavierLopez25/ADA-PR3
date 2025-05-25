@@ -135,8 +135,60 @@ fn ejercicio5() {
 }
 
 
+/// Aplica una sola petición con IMTF:
+/// - `list`: lista actual mutable
+/// - `req`: elemento solicitado
+/// - `seq`: secuencia completa de peticiones
+/// - `idx`: índice (0-based) de esta petición en `seq`
+/// Devuelve el costo de acceso (posición 1-based).
+fn imtf_access(list: &mut Vec<usize>, req: usize, seq: &[usize], idx: usize) -> usize {
+    // posición 0-based en la lista
+    let pos = list.iter()
+                  .position(|&x| x == req)
+                  .expect("¡Elemento no existe en la lista!");
+    let cost = pos + 1;           // 1-based
+
+    // lookahead de i-1 = pos elementos
+    let mut lookahead = seq.iter()
+                       .skip(idx + 1)
+                       .take(pos);
+    // si aparece dentro de esos pos elementos, movemos a front
+    if lookahead.any(|&x| x == req) {
+        list.remove(pos);
+        list.insert(0, req);
+    }
+    cost
+}
+
 fn ejercicio6() {
-    println!("Ejercicio 6 aún no implementado.\n");
+    println!("\n=== Ejercicio 6: IMTF sobre secuencias de mejor/peor caso MTF ===");
+
+    // 1) mejor caso MTF: 20 veces el mismo elemento al frente (0)
+    let seq_best = vec![0; 20];
+
+    // 2) peor caso MTF: [4,3,2,1,0] repetido 4 veces
+    let mut seq_worst = Vec::with_capacity(20);
+    for _ in 0..4 {
+        seq_worst.extend(&[4, 3, 2, 1, 0]);
+    }
+
+    for (label, seq) in &[("Mejor caso MTF", &seq_best), ("Peor caso MTF", &seq_worst)] {
+        println!("\n-- {} ({} solicitudes) --", label, seq.len());
+        let mut list = vec![0, 1, 2, 3, 4];
+        let mut total = 0;
+
+        for (i, &req) in seq.iter().enumerate() {
+            println!("Lista antes:    {:?}", list);
+            let cost = imtf_access(&mut list, req, seq, i);
+            println!(
+                "Solicitud: {:>2} | Costo: {:>2} | Lista después: {:?}\n",
+                req, cost, list
+            );
+            total += cost;
+        }
+
+        println!("Costo total IMTF en {}: {}\n", label, total);
+    }
 }
 
 // Función de costo y MTF reusada
