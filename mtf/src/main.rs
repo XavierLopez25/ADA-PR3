@@ -1,7 +1,15 @@
+use std::fs::OpenOptions;
 use std::io::{self, Write};
 
+
+// Función helper que imprime por pantalla y graba en el archivo
+fn log_line<W: Write>(writer: &mut W, s: &str) {
+    println!("{}", s);
+    writeln!(writer, "{}", s).unwrap();
+}
+
 // Ejercicio 1: MTF con lista fija de [0,1,2,3,4] y secuencia repetida
-fn ejercicio1() {
+fn ejercicio1<W: Write>(writer: &mut W) {
     let mut list = vec![0, 1, 2, 3, 4];
     let requests = vec![
         0,1,2,3,4,
@@ -10,20 +18,23 @@ fn ejercicio1() {
         0,1,2,3,4,
     ];
     let mut total_cost = 0;
-    println!("\n=== Ejercicio 1: MTF sobre [0,1,2,3,4] y 20 solicitudes ===");
+    log_line(writer,"\n=== Ejercicio 1: MTF sobre [0,1,2,3,4] y 20 solicitudes ===");
     for req in requests {
-        println!("Lista antes:    {:?}", list);
+        let before = format!("Lista antes:    {:?}", list);
+        log_line(writer, &before);
         let cost = access_cost(&mut list, req);
-        println!("Solicitud: {:>2} | Costo: {:>2} | Lista después: {:?}\n", req, cost, list);
+        let after = format!("Solicitud: {:>2} | Costo: {:>2} | Lista después: {:?}\n",
+                             req, cost, list);
+        log_line(writer, &after);
         total_cost += cost;
     }
-    println!("Costo total de todas las accesos: {}\n", total_cost);
-    println!("=========================\n");
+    log_line(writer, &format!("Costo total de todas las accesos: {}\n", total_cost));
+    log_line(writer, "=========================\n");
 
 }
 
-fn ejercicio2() {
-    println!("\n=== Ejercicio 2: MTF sobre [0,1,2,3,4] y secuencia dada ===");
+fn ejercicio2<W: Write>(writer: &mut W) {
+    log_line(writer,"\n=== Ejercicio 2: MTF sobre [0,1,2,3,4] y secuencia dada ===");
     // Configuración inicial
     let mut list = vec![0, 1, 2, 3, 4];
     // Secuencia de 17 solicitudes según el enunciado
@@ -37,22 +48,21 @@ fn ejercicio2() {
     let mut total_cost = 0;
     for req in requests {
         // Estado antes del acceso
-        println!("Lista antes:    {:?}", list);
-        // Calcula costo y aplica MTF
+        let before = format!("Lista antes:    {:?}", list);
+        log_line(writer, &before);        // Calcula costo y aplica MTF
         let cost = access_cost(&mut list, req);
         // Estado después
-        println!(
-            "Solicitud: {:>2} | Costo: {:>2} | Lista después: {:?}\n",
-            req, cost, list
-        );
+        let after = format!("Solicitud: {:>2} | Costo: {:>2} | Lista después: {:?}\n",
+                             req, cost, list);
+        log_line(writer, &after);
         total_cost += cost;
     }
 
-    println!("Costo total de las accesos: {}\n", total_cost);
+    log_line(writer,&format!("Costo total de las accesos: {}\n", total_cost));
 }
 
-fn ejercicio3() {
-    println!("\n=== Ejercicio 3: secuencia de 20 solicitudes de costo mínimo ===");
+fn ejercicio3<W: Write>(writer: &mut W) {
+    log_line(writer,"\n=== Ejercicio 3: secuencia de 20 solicitudes de costo mínimo ===");
 
     // Configuración inicial
     let mut list = vec![0, 1, 2, 3, 4];
@@ -67,12 +77,12 @@ fn ejercicio3() {
     }
 
     // Mostramos resultados
-    println!("Secuencia elegida (20 veces el mismo elemento al frente): {:?}", requests);
-    println!("Costo total mínimo de acceso: {}\n", total_cost);
+    log_line(writer,&format!("Secuencia elegida (20 veces el mismo elemento al frente): {:?}", requests));
+    log_line(writer,&format!("Costo total mínimo de acceso: {}\n", total_cost));
 }
 
-fn ejercicio4() {
-    println!("\n=== Ejercicio 4: secuencia de peor caso de 20 solicitudes ===");
+fn ejercicio4<W: Write>(writer: &mut W) {
+    log_line(writer,"\n=== Ejercicio 4: secuencia de peor caso de 20 solicitudes ===");
     // Configuración inicial
     let mut list = vec![0, 1, 2, 3, 4];
     // La peor secuencia pide siempre el elemento en la última posición:
@@ -90,29 +100,29 @@ fn ejercicio4() {
     }
 
     // Mostramos la secuencia y el costo máximo
-    println!("Secuencia elegida (peor caso): {:?}", requests);
-    println!("Costo total de acceso (peor caso): {}", total_cost);
+    log_line(writer,&format!("Secuencia elegida (peor caso): {:?}", requests));
+    log_line(writer,&format!("Costo total de acceso (peor caso): {}", total_cost));
 }
 
-fn ejercicio5() {
-    println!("\n=== Ejercicio 5: repetición de un mismo elemento 20 veces ===");
+fn ejercicio5<W: Write>(writer: &mut W) {
+    log_line(writer,"\n=== Ejercicio 5: repetición de un mismo elemento 20 veces ===");
 
     // Parte a) 20 solicitudes de '2'
-    println!("\n-- Secuencia: veinte veces el elemento 2 --");
+    log_line(writer,"\n-- Secuencia: veinte veces el elemento 2 --");
     let mut list = vec![0, 1, 2, 3, 4];
     let requests2 = vec![2; 20];
     let mut total2 = 0;
 
     for &req in &requests2 {
-        println!("Lista antes:    {:?}", list);
+        let before = format!("Lista antes:    {:?}", list);
+        log_line(writer, &before);
         let cost = access_cost(&mut list, req);
-        println!(
-            "Solicitud: {:>2} | Costo: {:>2} | Lista después: {:?}\n",
-            req, cost, list
-        );
+        let after = format!("Solicitud: {:>2} | Costo: {:>2} | Lista después: {:?}\n",
+                             req, cost, list);
+        log_line(writer, &after);
         total2 += cost;
     }
-    println!("Costo total con 20 repeticiones de 2: {}\n", total2);
+    log_line(writer,&format!("Costo total con 20 repeticiones de 2: {}\n", total2));
 
     // Parte b) ¿y si fueran veinte '3'?
     let mut list = vec![0, 1, 2, 3, 4];
@@ -121,11 +131,11 @@ fn ejercicio5() {
     for &req in &requests3 {
         total3 += access_cost(&mut list, req);
     }
-    println!("Costo total con 20 repeticiones de 3: {}\n", total3);
+    log_line(writer,&format!("Costo total con 20 repeticiones de 3: {}\n", total3));
 
     // Observación del patrón
-    println!("Observación:");
-    println!(
+    log_line(writer,"Observación:");
+    log_line(writer,
         "  Cuando repites 20 veces el mismo elemento x, el primer acceso cuesta \
          su posición inicial (p) y los 19 restantes cuestan 1 (por estar ya en front).\n\
          Así, C_total = p + 19·1. Por ejemplo:\n\
@@ -160,8 +170,8 @@ fn imtf_access(list: &mut Vec<usize>, req: usize, seq: &[usize], idx: usize) -> 
     cost
 }
 
-fn ejercicio6() {
-    println!("\n=== Ejercicio 6: IMTF sobre secuencias de mejor/peor caso MTF ===");
+fn ejercicio6<W: Write>(writer: &mut W) {
+    log_line(writer,"\n=== Ejercicio 6: IMTF sobre secuencias de mejor/peor caso MTF ===");
 
     // 1) mejor caso MTF: 20 veces el mismo elemento al frente (0)
     let seq_best = vec![0; 20];
@@ -173,21 +183,21 @@ fn ejercicio6() {
     }
 
     for (label, seq) in &[("Mejor caso MTF", &seq_best), ("Peor caso MTF", &seq_worst)] {
-        println!("\n-- {} ({} solicitudes) --", label, seq.len());
+        log_line(writer,&format!("\n-- {} ({} solicitudes) --", label, seq.len()));
         let mut list = vec![0, 1, 2, 3, 4];
         let mut total = 0;
 
         for (i, &req) in seq.iter().enumerate() {
-            println!("Lista antes:    {:?}", list);
+            let before = format!("Lista antes:    {:?}", list);
+            log_line(writer, &before);            
             let cost = imtf_access(&mut list, req, seq, i);
-            println!(
-                "Solicitud: {:>2} | Costo: {:>2} | Lista después: {:?}\n",
-                req, cost, list
-            );
+            let after = format!("Solicitud: {:>2} | Costo: {:>2} | Lista después: {:?}\n",
+                             req, cost, list);
+            log_line(writer, &after);
             total += cost;
         }
 
-        println!("Costo total IMTF en {}: {}\n", label, total);
+        log_line(writer,&format!("Costo total IMTF en {}: {}\n", label, total));
     }
 }
 
@@ -204,15 +214,24 @@ fn access_cost(list: &mut Vec<usize>, request: usize) -> usize {
 }
 
 fn main() {
+
+
+    let mut log_file = OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open("salida.txt")
+        .expect("No pude abrir salida.txt");
+
+
     loop {
-        println!("Seleccione una opción:");
-        println!("1) Ejercicio 1");
-        println!("2) Ejercicio 2");
-        println!("3) Ejercicio 3");
-        println!("4) Ejercicio 4");
-        println!("5) Ejercicio 5");
-        println!("6) Ejercicio 6");
-        println!("7) Salir\n");
+        log_line(&mut log_file,"Seleccione una opción:");
+        log_line(&mut log_file,"1) Ejercicio 1");
+        log_line(&mut log_file,"2) Ejercicio 2");
+        log_line(&mut log_file,"3) Ejercicio 3");
+        log_line(&mut log_file,"4) Ejercicio 4");
+        log_line(&mut log_file,"5) Ejercicio 5");
+        log_line(&mut log_file,"6) Ejercicio 6");
+        log_line(&mut log_file,"7) Salir\n");
         print!("Opción: ");
         io::stdout().flush().unwrap();
 
@@ -221,17 +240,17 @@ fn main() {
         let choice = input.trim().parse::<u32>().unwrap_or(0);
 
         match choice {
-            1 => ejercicio1(),
-            2 => ejercicio2(),
-            3 => ejercicio3(),
-            4 => ejercicio4(),
-            5 => ejercicio5(),
-            6 => ejercicio6(),
+            1 => ejercicio1(&mut log_file),
+            2 => ejercicio2(&mut log_file),
+            3 => ejercicio3(&mut log_file),
+            4 => ejercicio4(&mut log_file),
+            5 => ejercicio5(&mut log_file),
+            6 => ejercicio6(&mut log_file),
             7 => {
-                println!("Saliendo...");
+                log_line(&mut log_file,"Saliendo...");
                 break;
             }
-            _ => println!("Opción inválida, intente de nuevo.\n"),
+            _ => log_line(&mut log_file,"Opción inválida, intente de nuevo.\n"),
         }
     }
 }
